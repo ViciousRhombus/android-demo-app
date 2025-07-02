@@ -10,7 +10,7 @@ class NotificationService {
     if (_isInitialized) return;
 
     const settings = InitializationSettings(
-      android: AndroidInitializationSettings('@drawable/ic_stat_notification'),
+      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
     );
     await _plugin.initialize(settings);
 
@@ -39,8 +39,10 @@ class NotificationService {
         importance: Importance.max,
         priority: Priority.high,
         ticker: title,
+        // heads‑up text on legacy devices
         channelAction: AndroidNotificationChannelAction.createIfNotExists,
         color: const Color(0xFF5EBCF2),
+        // tray accent colour
         enableLights: true,
         ledColor: const Color(0xFF5EBCF2),
         ledOnMs: 800,
