@@ -1,16 +1,27 @@
-# atlanta_assignment
+---
 
-A new Flutter project.
+### BLoC flow for Task 1
 
-## Getting Started
+```
+  A[UI] -- FetchUsers --> B[UserBloc]
+  B -->|emit UserLoading| C((StateStream))
+  B -->|dbService.getUsers()| D[SQLite]
+  D --> E{users?}
+  E -- yes --> F[emit UserLoaded]
+  E -- no --> B2[apiService.fetchUsers()]
+  B2 --> D2[dbService.insertUsers()]
+  D2 --> F
+```
 
-This project is a starting point for a Flutter application.
+* The UI dispatches `FetchUsers` on first load and on manual refresh.
+* The BLoC first looks in SQLite; if empty, it fetches from the API and caches.
+* **Search** dispatches `SearchUsers` which queries SQLite with a `LIKE` clause.
 
-A few resources to get you started if this is your first Flutter project:
+### Local Notification Flow
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+1. `NotificationService.init()` registers the channel and requests permission.
+2. Pressing **Send Notification** calls `NotificationService.show()` which:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+   * Uses `AndroidNotificationDetails` with a custom colour, ticker, vibration pattern and **BigTextStyle** for tray UI.
+
+---
